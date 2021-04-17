@@ -9,8 +9,8 @@ services:
 #    ports:
 #      - $VERDACCIO_PORT:$VERDACCIO_PORT
     volumes:
-      - ./docker-data/storage/verdaccio:/verdaccio/storage
-      # - ./docker-data/storage/verdaccio/conf:/verdaccio/conf
+      - ./docker-data/storage/verdaccio/data:/verdaccio/storage
+      - ./docker-data/storage/verdaccio/conf:/verdaccio/conf
 
   nginx:
     image: nginx:latest
@@ -29,11 +29,11 @@ services:
     depends_on:
       - verdaccio
 
-volumes:
-  verdaccio:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./docker-data/storage/verdaccio
-      o: bind
+#volumes:
+#  verdaccio:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: ./docker-data/storage/verdaccio
+#      o: bind
 
