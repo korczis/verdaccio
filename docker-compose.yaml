@@ -4,12 +4,13 @@ services:
   verdaccio:
     build: .
     container_name: verdaccio
-    environment:
-      - VERDACCIO_PORT
-    ports:
-      - $VERDACCIO_PORT:$VERDACCIO_PORT
+#    environment:
+#      - VERDACCIO_PORT
+#    ports:
+#      - $VERDACCIO_PORT:$VERDACCIO_PORT
     volumes:
       - ./docker-data/storage/verdaccio:/verdaccio/storage
+      # - ./docker-data/storage/verdaccio/conf:/verdaccio/conf
 
   nginx:
     image: nginx:latest
@@ -20,40 +21,19 @@ services:
       - ./docker-data/certbot/var:/var/lib/letsencrypt
       - ./docker-data/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./docker-data/nginx/dhparam:/etc/ssl/certs
+      - ./docker-data/storage/nginx/logs:/var/logs/nginx
     ports:
       - 80:80
       - 8080:8080
-      - 443:443
-      - 8443:8443
+      - 4873:4873
     depends_on:
       - verdaccio
 
-#  certbot:
-#    image: certbot/certbot
-#    container_name: certbot
-#    volumes:
-#      - ./certbot/etc:/etc/letsencrypt
-#      - ./certbot/var:/var/lib/letsencrypt
-#      - ./web/root:/var/www/html
-#      - ./web/certbot:/var/www/certbot
-#    depends_on:
-#      - nginx
-#    command: certonly --webroot --webroot-path=/var/www/html --register-unsafely-without-email --email korczis@gmail.com --agree-tos --no-eff-email --staging -d example.com
-#    environment:
-#      - VIRTUAL_HOST=korczis.com
-
 volumes:
-#  certbot:
-#    driver: local
-#  verdaccio-storage:
-#    driver: local
-#    driver_opts:
-#      type: none
-#      device: ./docker-data/storage/verdaccio
-#      o: bind
-  dhparam:
+  verdaccio:
     driver: local
     driver_opts:
       type: none
-      device: ./data/nginx/dhparam/
+      device: ./docker-data/storage/verdaccio
       o: bind
+
